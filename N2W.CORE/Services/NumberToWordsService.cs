@@ -1,60 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using N2W.CORE.Handlers;
 
 namespace N2W.CORE.Services
 {
   public class NumberToWordsService : INumberToWordsService
   {
     private readonly IDecompositionService _service;
-    private readonly Dictionary<int, string> _parts = GetParts();
-
-    public NumberToWordsService(IDecompositionService service)
+    private readonly IRangeHandler _handler;
+    public NumberToWordsService(IDecompositionService service, IRangeHandler handler)
     {
       _service = service;
+      _handler = handler;
     }
-
-    private static Dictionary<int, string> GetParts()
-    {
-      return new Dictionary<int, string>
-      {
-        { 0, "zero" },
-        { 1, "one" },
-        { 2, "two" },
-        { 3, "three" },
-        { 4, "four" },
-        { 5, "five" },
-        { 6, "six" },
-        { 7, "seven" },
-        { 8, "eight" },
-        { 9, "nine" },
-        { 10, "ten" },
-        { 20, "twenty" },
-        { 100, "hundred" },
-        { 1000, "thousand" },
-        { 1000000, "million" },
-      };
-    }
-
     public string GetWords(int number)
     {
+      if (number == 0)
+        return "zero";
+
       var decomposition = _service.GetDecomposition(number);
       var words = string.Empty;
 
       foreach (var item in decomposition)
       {
-        var word = GetWord(item);
-
-        words = string.Format("{0} {1}", words, word);
+        var word = _handler.GetWord(item);
+        if (word != string.Empty)
+          words = string.Format("{0} {1}", words, word);
       }
+
+      words = AddAndIfNeeded(words);
+
       return words.Trim();
     }
 
-    private string GetWord(int item)
+    private static string AddAndIfNeeded(string words)
     {
-      var pow = Math.Log10(item);
-
-      return _parts.First(e => e.Key == item).Value;
+      if (words.Contains(Constants.Hundred))
+        words = words.Replace(Constants.Hundred, string.Format("{0} and", Constants.Hundred));
+      return words;
     }
   }
 }

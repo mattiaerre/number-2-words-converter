@@ -1,4 +1,5 @@
-﻿using N2W.CORE.Services;
+﻿using N2W.CORE.Handlers;
+using N2W.CORE.Services;
 using NUnit.Framework;
 
 namespace N2W.CORE.TEST.Services
@@ -12,17 +13,18 @@ namespace N2W.CORE.TEST.Services
     public void Given_A_NumberToWordsService()
     {
       var service = new DecompositionService();
+      var handler = new Range119Handler(new Range2090Handler(new Range100900Handler(new EndOfChainHandler())));
 
-      _service = new NumberToWordsService(service);
+      _service = new NumberToWordsService(service, handler);
     }
 
-    [TestCase(1, "one")]
-    //[TestCase(2, "two")]
-    //[TestCase(3, "three")]
-    //[TestCase(4, "four")]
-    //[TestCase(5, "five")]
+    [TestCase(0, "zero")]
+    [TestCase(4, "four")]
+    [TestCase(15, "fifteen")]
     [TestCase(21, "twenty one")]
     [TestCase(105, "one hundred and five")]
+    [TestCase(456, "four hundred and fifty six")]
+    [TestCase(815, "eight hundred and fifteen")]
     public void It_Should_Be_Able_To_Convert_Number_Into_Words(int number, string words)
     {
       var result = _service.GetWords(number);

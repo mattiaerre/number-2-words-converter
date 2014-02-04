@@ -39,14 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Handlers\EndOfChainHandler.cs" />
+    <Compile Include="Handlers\Range119Handler.cs" />
+    <Compile Include="Handlers\Range100900Handler.cs" />
+    <Compile Include="Handlers\Range2090Handler.cs" />
+    <Compile Include="Handlers\RangeHandlerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDecompositionService.cs" />
     <Compile Include="Services\INumberToWordsService.cs" />
     <Compile Include="Services\DecompositionService.cs" />
-    <Compile Include="Services\IRangeNumberToWordService.cs" />
+    <Compile Include="Handlers\IRangeHandler.cs" />
     <Compile Include="Services\NumberToWordsService.cs" />
-    <Compile Include="Services\RangeNumberToWordService019.cs" />
-    <Compile Include="Services\RangeNumberToWordServiceBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
