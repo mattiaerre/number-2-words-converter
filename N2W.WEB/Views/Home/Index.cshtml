@@ -1,0 +1,50 @@
+﻿<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#toWords').click(function () {
+      var number = $('#number').val();
+
+      if (isNaN(number) || number.length == 0 || number <= 0 || number > 999999999) {
+        validation();
+        return;
+      }
+
+      $.ajax({
+        cache: false,
+        url: "/Home/GetWords",
+        data: { number: number }
+      }).done(function (data) {
+        $('#words').html(data);
+      }).fail(function (jqXhr, textStatus) {
+        console.log(textStatus);
+        validation();
+      });
+    });
+  });
+
+  function validation() {
+    alert('the number must be an integer between 0 and 999999999');
+  };
+</script>
+
+<style type="text/css">
+  .box {
+    border: 1px solid #aaa;
+    margin: 5px;
+    padding: 5px;
+    width: 600px;
+  }
+
+  .box, input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1em;
+  }
+</style>
+
+<div class="box">
+  <span>Number: </span>
+  <input id="number" type="number" />
+  <input id="toWords" type="button" value="To words" />
+  <span id="words">&nbsp;</span>
+</div>
