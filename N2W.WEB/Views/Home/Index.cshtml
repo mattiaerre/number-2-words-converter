@@ -2,26 +2,38 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $('#toWords').click(function () {
-      var number = $('#number').val();
-
-      if (isNaN(number) || number.length == 0 || number <= 0 || number > 999999999) {
-        validation();
-        return;
-      }
-
-      $.ajax({
-        cache: false,
-        url: "/Home/GetWords",
-        data: { number: number }
-      }).done(function (data) {
-        $('#words').html(data);
-      }).fail(function (jqXhr, textStatus) {
-        console.log(textStatus);
-        validation();
+    $('#toWords')
+      .click(function () {
+        numberToWords();
       });
-    });
+
+    $('#number')
+      .keypress(function (e) {
+        if (e.which == 13) {
+          numberToWords();
+        }
+      });
   });
+
+  function numberToWords() {
+    var number = $('#number').val();
+
+    if (isNaN(number) || number.length == 0 || number <= 0 || number > 999999999) {
+      validation();
+      return;
+    }
+
+    $.ajax({
+      cache: false,
+      url: "/Home/GetWords",
+      data: { number: number }
+    }).done(function (data) {
+      $('#words').html(data);
+    }).fail(function (jqXhr, textStatus) {
+      console.log(textStatus);
+      validation();
+    });
+  };
 
   function validation() {
     alert('the number must be an integer between 0 and 999999999');
