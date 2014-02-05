@@ -29,6 +29,7 @@ namespace N2W.CORE.TEST.Services
     [TestCase(1000, "one thousand")]
     [TestCase(1111, "one thousand one hundred and eleven")]
     [TestCase(1234, "one thousand two hundred and thirty four")]
+    [TestCase(50001, "fifty thousand and one")]
     [TestCase(56945781, "fifty six million nine hundred and forty five thousand seven hundred and eighty one")]
     public void It_Should_Be_Able_To_Convert_Number_Into_Words(int number, string words)
     {

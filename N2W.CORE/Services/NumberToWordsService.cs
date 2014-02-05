@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using N2W.CORE.Handlers;
 
@@ -10,7 +9,6 @@ namespace N2W.CORE.Services
     private readonly IDecompositionService _service;
     private readonly IRangeHandler _handler;
     private const string And = "and";
-
     public NumberToWordsService(IDecompositionService service, IRangeHandler handler)
     {
       _service = service;
@@ -26,29 +24,27 @@ namespace N2W.CORE.Services
       var words = string.Empty;
       foreach (var powerOfTen in decomposition.OrderByDescending(e => e.Key))
       {
+        var innerWords = string.Empty;
         foreach (var numberPart in powerOfTen.Value)
         {
-          words = string.Format("{0} {1}", words, _handler.GetWord(numberPart));
+          innerWords = string.Format("{0} {1}", innerWords, _handler.GetWord(numberPart));
+          innerWords = innerWords.Trim();
         }
 
-        words = AddAndIfNeeded(words);
+        innerWords = AddAndIfNeeded(innerWords);
 
         if (powerOfTen.Key == 1)
-          words = string.Format("{0} thousand", words);
+          innerWords = string.Format("{0} thousand", innerWords);
         if (powerOfTen.Key == 2)
-          words = string.Format("{0} million", words);
+          innerWords = string.Format("{0} million", innerWords);
+
+        words = string.Format("{0} {1}", words, innerWords);
       }
 
-      words = RemoveDuplicatesAnd(words);
+      words = RemoveAndsAtTheVeryBeginning(words);
 
-      return words;
+      return words.Trim();
     }
-
-    private static string RemoveDuplicatesAnd(string words)
-    {
-      return words.Replace(string.Format("{0} {1}", And, And), And);
-    }
-
     private static string AddAndIfNeeded(string words)
     {
       var andAlready = false;
@@ -59,11 +55,8 @@ namespace N2W.CORE.Services
 
       AddAndIfNeeded(ref words, ref andAlready, Constants.OneToNine);
 
-      words = RemoveAndsAtTheVeryBeginning(words);
-
       return words.Trim();
     }
-
     private static string RemoveAndsAtTheVeryBeginning(string words)
     {
       words = words.Trim();
@@ -75,7 +68,6 @@ namespace N2W.CORE.Services
       }
       return words;
     }
-
     private static void AddAndIfNeeded(ref string words, ref bool andAlready, IEnumerable<KeyValuePair<int, string>> collection)
     {
       if (!andAlready)
