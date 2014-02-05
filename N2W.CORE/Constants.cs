@@ -4,7 +4,11 @@ namespace N2W.CORE
 {
   public static class Constants
   {
+    public static string And = "and";
+    public static string Zero = "zero";
     public static string Hundred = "hundred";
+    public static string Thousand = "thousand";
+    public static string Million = "million";
 
     public static IDictionary<int, string> OneToNine = new Dictionary<int, string>
       {

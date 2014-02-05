@@ -22,7 +22,6 @@ namespace N2W.CORE.Services
 
       return decomposition;
     }
-
     private static IEnumerable<int> GetNumbers(string chunk)
     {
       var digits = chunk.ToCharArray().Select(e => Convert.ToInt32(e.ToString(CultureInfo.InvariantCulture))).ToArray();
@@ -43,7 +42,6 @@ namespace N2W.CORE.Services
         return new[] { digits[0] * 100, digits[1] * 10, digits[2] };
       return Enumerable.Empty<int>();
     }
-
     private static IEnumerable<string> Split(string source)
     {
       var length = source.Length;

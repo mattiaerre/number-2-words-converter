@@ -8,7 +8,6 @@ namespace N2W.CORE.Services
   {
     private readonly IDecompositionService _service;
     private readonly IRangeHandler _handler;
-    private const string And = "and";
     public NumberToWordsService(IDecompositionService service, IRangeHandler handler)
     {
       _service = service;
@@ -17,7 +16,7 @@ namespace N2W.CORE.Services
     public string GetWords(int number)
     {
       if (number == 0)
-        return "zero";
+        return Constants.Zero;
 
       var decomposition = _service.GetDecomposition(number);
 
@@ -33,10 +32,10 @@ namespace N2W.CORE.Services
 
         innerWords = AddAndIfNeeded(innerWords);
 
-        if (powerOfTen.Key == 1)
-          innerWords = string.Format("{0} thousand", innerWords);
-        if (powerOfTen.Key == 2)
-          innerWords = string.Format("{0} million", innerWords);
+        if (powerOfTen.Key == 1 && !string.IsNullOrEmpty(innerWords))
+          innerWords = string.Format("{0} {1}", innerWords, Constants.Thousand);
+        if (powerOfTen.Key == 2 && !string.IsNullOrEmpty(innerWords))
+          innerWords = string.Format("{0} {1}", innerWords, Constants.Million);
 
         words = string.Format("{0} {1}", words, innerWords);
       }
@@ -61,7 +60,7 @@ namespace N2W.CORE.Services
     {
       words = words.Trim();
 
-      if (words.Substring(0, 3) == And)
+      if (words.Substring(0, 3) == Constants.And)
       {
         words = words.Substring(3);
         return RemoveAndsAtTheVeryBeginning(words);
@@ -76,7 +75,7 @@ namespace N2W.CORE.Services
         {
           if (words.Contains(item.Value))
           {
-            words = words.Replace(item.Value, string.Format("{0} {1}", And, item.Value));
+            words = words.Replace(item.Value, string.Format("{0} {1}", Constants.And, item.Value));
             andAlready = true;
           }
         }

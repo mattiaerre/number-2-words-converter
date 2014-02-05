@@ -11,9 +11,7 @@ namespace N2W.CORE.Handlers
     public override string GetWord(int number)
     {
       if (number >= 20 && number <= 90)
-      {
         return Constants.TwentyToNinety.First(e => e.Key == number).Value;
-      }
       return Next.GetWord(number);
     }
   }
