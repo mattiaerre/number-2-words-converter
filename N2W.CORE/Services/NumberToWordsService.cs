@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using N2W.CORE.Handlers;
 
 namespace N2W.CORE.Services
@@ -7,6 +9,8 @@ namespace N2W.CORE.Services
   {
     private readonly IDecompositionService _service;
     private readonly IRangeHandler _handler;
+    private const string And = "and";
+
     public NumberToWordsService(IDecompositionService service, IRangeHandler handler)
     {
       _service = service;
@@ -26,34 +30,65 @@ namespace N2W.CORE.Services
         {
           words = string.Format("{0} {1}", words, _handler.GetWord(numberPart));
         }
+
+        words = AddAndIfNeeded(words);
+
         if (powerOfTen.Key == 1)
           words = string.Format("{0} thousand", words);
         if (powerOfTen.Key == 2)
           words = string.Format("{0} million", words);
       }
 
-      words = AddAndIfNeeded(words);
+      words = RemoveDuplicatesAnd(words);
 
       return words;
     }
 
+    private static string RemoveDuplicatesAnd(string words)
+    {
+      return words.Replace(string.Format("{0} {1}", And, And), And);
+    }
+
     private static string AddAndIfNeeded(string words)
     {
-      //const string and = "and";
+      var andAlready = false;
 
-      //if (words.Contains(Constants.Hundred))
-      //  words = words.Replace(Constants.Hundred, string.Format("{0} {1}", Constants.Hundred, and));
+      AddAndIfNeeded(ref words, ref andAlready, Constants.TwentyToNinety);
 
-      //words = words.Trim();
+      AddAndIfNeeded(ref words, ref andAlready, Constants.TenToNineteen);
 
-      //if (words.Substring(words.Length - 4) == string.Format(" {0}", and))
-      //  words = words.Substring(0, words.Length - 3);
+      AddAndIfNeeded(ref words, ref andAlready, Constants.OneToNine);
 
-      //return words.Trim();
-
-      // todo: and management
+      words = RemoveAndsAtTheVeryBeginning(words);
 
       return words.Trim();
+    }
+
+    private static string RemoveAndsAtTheVeryBeginning(string words)
+    {
+      words = words.Trim();
+
+      if (words.Substring(0, 3) == And)
+      {
+        words = words.Substring(3);
+        return RemoveAndsAtTheVeryBeginning(words);
+      }
+      return words;
+    }
+
+    private static void AddAndIfNeeded(ref string words, ref bool andAlready, IEnumerable<KeyValuePair<int, string>> collection)
+    {
+      if (!andAlready)
+      {
+        foreach (var item in collection)
+        {
+          if (words.Contains(item.Value))
+          {
+            words = words.Replace(item.Value, string.Format("{0} {1}", And, item.Value));
+            andAlready = true;
+          }
+        }
+      }
     }
   }
 }
