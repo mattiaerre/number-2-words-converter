@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using N2W.CORE.Services;
 
 namespace N2W.WEB.Controllers
@@ -19,7 +20,14 @@ namespace N2W.WEB.Controllers
 
     public string GetWords(int number)
     {
-      return _service.GetWords(number);
+      try
+      {
+        return _service.GetWords(number);
+      }
+      catch (Exception ex)
+      {
+        return ex.Message;
+      }
     }
   }
 }
