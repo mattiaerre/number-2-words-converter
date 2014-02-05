@@ -4,6 +4,6 @@ namespace N2W.CORE.Services
 {
   public interface IDecompositionService
   {
-    IEnumerable<int> GetDecomposition(int number);
+    IDictionary<int, IEnumerable<int>> GetDecomposition(int number);
   }
 }
