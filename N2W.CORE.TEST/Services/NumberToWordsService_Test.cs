@@ -19,6 +19,7 @@ namespace N2W.CORE.TEST.Services
     }
 
     [TestCase(0, "zero")]
+    [TestCase(1, "one")]
     [TestCase(4, "four")]
     [TestCase(15, "fifteen")]
     [TestCase(21, "twenty one")]
@@ -29,9 +30,9 @@ namespace N2W.CORE.TEST.Services
     [TestCase(1000, "one thousand")]
     [TestCase(1111, "one thousand one hundred and eleven")]
     [TestCase(1234, "one thousand two hundred and thirty four")]
-    [TestCase(50001, "fifty thousand and one")]
     [TestCase(1000000, "one million")]
     [TestCase(56945781, "fifty six million nine hundred and forty five thousand seven hundred and eighty one")]
+    [TestCase(100014204, "one hundred million fourteen thousand two hundred and four")]
     public void It_Should_Be_Able_To_Convert_Number_Into_Words(int number, string words)
     {
       var result = _service.GetWords(number);

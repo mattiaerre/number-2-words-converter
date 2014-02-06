@@ -31,6 +31,7 @@ namespace N2W.CORE.Services
         }
 
         innerWords = AddAndIfNeeded(innerWords);
+        innerWords = RemoveAndsAtTheVeryBeginning(innerWords);
 
         if (powerOfTen.Key == 1 && !string.IsNullOrEmpty(innerWords))
           innerWords = string.Format("{0} {1}", innerWords, Constants.Thousand);
@@ -39,8 +40,6 @@ namespace N2W.CORE.Services
 
         words = string.Format("{0} {1}", words, innerWords);
       }
-
-      words = RemoveAndsAtTheVeryBeginning(words);
 
       return words.Trim();
     }
@@ -60,7 +59,7 @@ namespace N2W.CORE.Services
     {
       words = words.Trim();
 
-      if (words.Substring(0, 3) == Constants.And)
+      if (!string.IsNullOrEmpty(words) && words.Substring(0, 3) == Constants.And)
       {
         words = words.Substring(3);
         return RemoveAndsAtTheVeryBeginning(words);
